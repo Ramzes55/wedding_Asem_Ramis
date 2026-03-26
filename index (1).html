@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
-  <style>
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=PTpgwf46tBv4RlbSSDhQugf-_bMa2B5PdpJMMTEMeLKe2SAbjYwvcuO9rq7pEipKvlvMc_ASv59_XBuMTik-69a8hzzskAQ98DSIqQXhCNgRk0dZKWwBumHpaB1NUJRNjQQPk67BozxEDrT8uOqksHQCbaqeeyoqKkgTOR801kUke7W27Jc8pAo7qKCP3sPVgrw-inTmOxyoO1WpBwvV0gNjtsqYSk6ZUdkgE9rK-bkDfD-LfaNmv6nRtmCKN9KLwC_x4VHnjytRbxsDEltnHQ" charset="UTF-8"></script><style>
     :root {
       --bg: #d5d4cf;
       --panel: #eceae4;
@@ -817,7 +817,7 @@
       button.textContent = 'Отправляем...';
 
       try {
-        if (!SCRIPT_URL || SCRIPT_URL.includes('PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE')) {
+        if (!SCRIPT_URL || SCRIPT_URL.includes('https://script.google.com/macros/s/AKfycbyRL48pXx4MJtsguB7bG07GLlpO2rL8LCo3g8C8JLMwJ9i7K87nDOm2XWlp3ocPf6gKzw/exec')) {
           throw new Error('SCRIPT_URL_NOT_SET');
         }
         await sendToGoogleSheets(data);
