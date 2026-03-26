@@ -490,8 +490,8 @@
   <div class="page">
     <section class="hero-card reveal visible">
       <div class="hero-frame">
-        <img class="hero-image" src="assets/hero-photo.jpg" alt="Свадебное приглашение" />
-        <img class="seal" src="assets/seal.png" alt="Печать" />
+        <img class="hero-image" src="hero-photo.jpg" alt="Свадебное приглашение" />
+        <img class="seal" src="seal.png" alt="Печать" />
       </div>
       <h1 class="hero-names">Рамис и Асем</h1>
       <div class="hero-date">Май&nbsp;|&nbsp;25&nbsp;|&nbsp;2026</div>
@@ -614,7 +614,7 @@
     <section class="section reveal">
       <div class="form-card">
         <h2 class="section-title" style="text-align:center;">Анкета</h2>
-        <p class="rsvp-text">Пожалуйста, сообщите нам о своём решении. Форма сохраняет ответ только в вашем браузере — при необходимости позже можно подключить отправку в Telegram или Google Sheets.</p>
+        <p class="rsvp-text">Пожалуйста, заполните короткую анкету. Ответ можно отправлять прямо в Google Sheets после подключения Google Apps Script.</p>
         <form id="rsvp-form">
           <div class="field full">
             <label for="guestName">Ваше имя и фамилия</label>
@@ -652,7 +652,7 @@
               <label class="option"><input type="checkbox" name="drinks" value="Шампанское" /><span>Шампанское</span></label>
               <label class="option"><input type="checkbox" name="drinks" value="Белое вино" /><span>Белое вино</span></label>
               <label class="option"><input type="checkbox" name="drinks" value="Красное вино" /><span>Красное вино</span></label>
-              <label class="option"><input type="checkbox" name="drinks" value="Виски" /><span>Виски</span></label>
+              <label class="option"><input type="checkbox" name="drinks" value="Водка" /><span>Водка</span></label>
               <label class="option"><input type="checkbox" name="drinks" value="Коньяк" /><span>Коньяк</span></label>
               <label class="option"><input type="checkbox" name="drinks" value="Безалкогольные напитки" /><span>Безалкогольные напитки</span></label>
             </div>
@@ -666,7 +666,7 @@
           <div class="notice" id="notice"></div>
 
           <div class="form-actions">
-            <button class="button" type="submit">Сохранить ответ</button>
+            <button class="button" type="submit">Отправить ответ</button>
             <button class="button secondary" type="button" id="downloadBtn">Скачать ответ JSON</button>
           </div>
         </form>
@@ -743,17 +743,21 @@
     const notice = document.getElementById('notice');
     const downloadBtn = document.getElementById('downloadBtn');
     const storageKey = 'ramis-asem-rsvp';
+    const SCRIPT_URL = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
 
     function collectFormData() {
       const formData = new FormData(form);
+      const drinks = formData.getAll('drinks');
       return {
         guestName: formData.get('guestName') || '',
         attendance: formData.get('attendance') || '',
         children: formData.get('children') || '',
         childrenNote: formData.get('childrenNote') || '',
-        drinks: formData.getAll('drinks'),
+        drinks,
+        drinksText: drinks.join(', '),
         comment: formData.get('comment') || '',
-        savedAt: new Date().toISOString()
+        savedAt: new Date().toISOString(),
+        page: window.location.href
       };
     }
 
@@ -779,6 +783,22 @@
       });
     }
 
+    async function sendToGoogleSheets(data) {
+      const payload = new URLSearchParams();
+      Object.entries(data).forEach(([key, value]) => {
+        payload.append(key, Array.isArray(value) ? JSON.stringify(value) : String(value ?? ''));
+      });
+
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: payload.toString()
+      });
+    }
+
     try {
       const saved = localStorage.getItem(storageKey);
       if (saved) fillForm(JSON.parse(saved));
@@ -786,13 +806,38 @@
       console.error(error);
     }
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const data = collectFormData();
       localStorage.setItem(storageKey, JSON.stringify(data));
-      notice.style.display = 'block';
-      notice.textContent = 'Ответ сохранён локально в браузере. Для полноценной отправки можно позже подключить Telegram-бота или Google Sheets.';
-      notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      const button = form.querySelector('button[type="submit"]');
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Отправляем...';
+
+      try {
+        if (!SCRIPT_URL || SCRIPT_URL.includes('PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE')) {
+          throw new Error('SCRIPT_URL_NOT_SET');
+        }
+        await sendToGoogleSheets(data);
+        notice.style.display = 'block';
+        notice.textContent = 'Спасибо! Ваш ответ отправлен.';
+        form.reset();
+        localStorage.removeItem(storageKey);
+      } catch (error) {
+        notice.style.display = 'block';
+        if (error.message === 'SCRIPT_URL_NOT_SET') {
+          notice.textContent = 'Форма уже обновлена под Google Sheets, но в код пока не вставлена ссылка Apps Script. До подключения ответ сохранён только на этом устройстве.';
+        } else {
+          notice.textContent = 'Не удалось отправить ответ в Google Sheets. Мы сохранили его локально в этом браузере — можно попробовать ещё раз чуть позже.';
+          console.error(error);
+        }
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+        notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     });
 
     downloadBtn.addEventListener('click', () => {
