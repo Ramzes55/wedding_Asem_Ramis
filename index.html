@@ -743,12 +743,19 @@
     const notice = document.getElementById('notice');
     const downloadBtn = document.getElementById('downloadBtn');
     const storageKey = 'ramis-asem-rsvp';
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnzPoFtthxjM4WgzeIcrJ-HjgT21EC2flVWCok_qzNmEz5mUnwDVsTCe7up-f1FlhhXg/exec';
+    const submittedStorageKey = 'ramis-asem-rsvp-last-submitted';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxp0WpIRxcC8cEat32ijQvTcaXkyuDbyW8XvxHI9wMXaflOpdK1Ez9KEgNltN6HcnRnRw/exec';
+
+    function setNotice(message) {
+      notice.style.display = 'block';
+      notice.textContent = message;
+    }
 
     function collectFormData() {
       const formData = new FormData(form);
       const drinks = formData.getAll('drinks');
       return {
+        submissionId: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         guestName: formData.get('guestName') || '',
         attendance: formData.get('attendance') || '',
         children: formData.get('children') || '',
@@ -757,6 +764,7 @@
         drinksText: drinks.join(', '),
         comment: formData.get('comment') || '',
         savedAt: new Date().toISOString(),
+        userAgent: navigator.userAgent,
         page: window.location.href
       };
     }
@@ -795,6 +803,8 @@
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
+        cache: 'no-store',
+        keepalive: true,
         body: payload.toString()
       });
     }
@@ -821,6 +831,7 @@
           throw new Error('SCRIPT_URL_NOT_SET');
         }
         await sendToGoogleSheets(data);
+        localStorage.setItem(submittedStorageKey, JSON.stringify(data));
         notice.style.display = 'block';
         notice.textContent = 'Спасибо! Ваш ответ отправлен.';
         form.reset();
