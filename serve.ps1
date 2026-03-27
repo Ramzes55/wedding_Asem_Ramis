@@ -38,6 +38,7 @@ function Get-ContentType {
     '.png'  { return 'image/png' }
     '.jpg'  { return 'image/jpeg' }
     '.jpeg' { return 'image/jpeg' }
+    '.mp3'  { return 'audio/mpeg' }
     '.svg'  { return 'image/svg+xml' }
     '.ico'  { return 'image/x-icon' }
     '.txt'  { return 'text/plain; charset=utf-8' }

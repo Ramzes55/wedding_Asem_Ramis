@@ -14,12 +14,87 @@
 </head>
 <body>
   <div class="page">
+    <div class="audio-control" id="audioControl">
+      <button
+        class="audio-toggle"
+        id="audioToggle"
+        type="button"
+        aria-label="Включить музыку"
+        aria-pressed="false"
+      >
+        <svg class="audio-toggle__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 10h4l5-4v12l-5-4H4z"></path>
+          <path class="audio-toggle__wave audio-toggle__wave--one" d="M16 9c1.5 1.3 1.5 4.7 0 6"></path>
+          <path class="audio-toggle__wave audio-toggle__wave--two" d="M18.8 6.8c2.8 2.5 2.8 7.9 0 10.4"></path>
+        </svg>
+      </button>
+      <p class="audio-control__hint">Можно включить нашу песню</p>
+    </div>
+
     <section class="hero-card reveal visible">
       <div class="hero-frame">
         <img class="hero-image" src="IMG_3563.JPG" alt="Рамис и Асема" />
       </div>
       <h1 class="hero-names">Рамис и Асема</h1>
-      <div class="hero-date">Август&nbsp;|&nbsp;7&nbsp;|&nbsp;2026</div>
+      <div class="hero-calendar" aria-label="Календарь свадьбы — 7 августа 2026">
+        <div class="hero-calendar__head">
+          <span class="hero-calendar__month">Август</span>
+          <span class="hero-calendar__year">2026</span>
+        </div>
+        <div class="hero-calendar__weekdays" aria-hidden="true">
+          <span>Пн</span>
+          <span>Вт</span>
+          <span>Ср</span>
+          <span>Чт</span>
+          <span>Пт</span>
+          <span>Сб</span>
+          <span>Вс</span>
+        </div>
+        <div class="hero-calendar__grid" aria-hidden="true">
+          <span class="hero-calendar__cell is-empty"></span>
+          <span class="hero-calendar__cell is-empty"></span>
+          <span class="hero-calendar__cell is-empty"></span>
+          <span class="hero-calendar__cell is-empty"></span>
+          <span class="hero-calendar__cell is-empty"></span>
+          <span class="hero-calendar__cell">1</span>
+          <span class="hero-calendar__cell">2</span>
+          <span class="hero-calendar__cell">3</span>
+          <span class="hero-calendar__cell">4</span>
+          <span class="hero-calendar__cell">5</span>
+          <span class="hero-calendar__cell">6</span>
+          <span class="hero-calendar__cell is-highlighted"><span>7</span></span>
+          <span class="hero-calendar__cell">8</span>
+          <span class="hero-calendar__cell">9</span>
+          <span class="hero-calendar__cell">10</span>
+          <span class="hero-calendar__cell">11</span>
+          <span class="hero-calendar__cell">12</span>
+          <span class="hero-calendar__cell">13</span>
+          <span class="hero-calendar__cell">14</span>
+          <span class="hero-calendar__cell">15</span>
+          <span class="hero-calendar__cell">16</span>
+          <span class="hero-calendar__cell">17</span>
+          <span class="hero-calendar__cell">18</span>
+          <span class="hero-calendar__cell">19</span>
+          <span class="hero-calendar__cell">20</span>
+          <span class="hero-calendar__cell">21</span>
+          <span class="hero-calendar__cell">22</span>
+          <span class="hero-calendar__cell">23</span>
+          <span class="hero-calendar__cell">24</span>
+          <span class="hero-calendar__cell">25</span>
+          <span class="hero-calendar__cell">26</span>
+          <span class="hero-calendar__cell">27</span>
+          <span class="hero-calendar__cell">28</span>
+          <span class="hero-calendar__cell">29</span>
+          <span class="hero-calendar__cell">30</span>
+          <span class="hero-calendar__cell">31</span>
+          <span class="hero-calendar__cell is-empty"></span>
+          <span class="hero-calendar__cell is-empty"></span>
+          <span class="hero-calendar__cell is-empty"></span>
+          <span class="hero-calendar__cell is-empty"></span>
+          <span class="hero-calendar__cell is-empty"></span>
+          <span class="hero-calendar__cell is-empty"></span>
+        </div>
+      </div>
       <div class="countdown-wrap">
         <div class="countdown-label">До свадьбы осталось</div>
         <div class="countdown" id="countdown">
@@ -40,7 +115,7 @@
         <path d="M30 47C20 44 13 35 15 24C25 27 31 37 30 47Z" stroke="currentColor" stroke-width="1.8"/>
       </svg>
       <p class="intro-text">
-        Один день в году станет для нас особенно важным и счастливым, и нам очень хочется разделить его с самыми близкими. С огромной радостью приглашаем вас на нашу свадьбу.
+        Мы решили написать свою историю «Жили долго и счастливо», и именно поэтому нам так важно оказаться в окружении самых близких и дорогих людей. С огромной радостью приглашаем вас разделить с нами этот волнующий и незабываемый день — День нашей свадьбы!
       </p>
     </section>
 
@@ -138,8 +213,8 @@
         <p class="rsvp-text">Пожалуйста, заполните короткую анкету.</p>
         <form id="rsvp-form">
           <div class="field full">
-            <label for="guestName">Ваше имя и фамилия</label>
-            <div class="hint">Напишите Ваше имя и имена гостей, которые будут присутствовать вместе с Вами</div>
+            <div class="field-label">Ваше имя и фамилия</div>
+            <div class="hint">А также имя и фамилия Вашей пары (при наличии).</div>
             <input id="guestName" name="guestName" type="text" placeholder="Например: Алексей Ихсанов" required />
           </div>
 
@@ -162,7 +237,7 @@
           </fieldset>
 
           <div id="childrenNoteField" class="field conditional-block">
-            <label for="childrenNote">Если да — уточнение</label>
+            <div class="field-label">Если да — уточнение</div>
             <input id="childrenNote" name="childrenNote" type="text" placeholder="Например: 1 ребёнок, 6 лет" />
           </div>
 
@@ -174,13 +249,12 @@
               <label class="option"><input type="checkbox" name="drinks" value="Белое вино" /><span>Белое вино</span></label>
               <label class="option"><input type="checkbox" name="drinks" value="Красное вино" /><span>Красное вино</span></label>
               <label class="option"><input type="checkbox" name="drinks" value="Водка" /><span>Водка</span></label>
-              <label class="option"><input type="checkbox" name="drinks" value="Коньяк" /><span>Коньяк</span></label>
               <label class="option"><input type="checkbox" name="drinks" value="Безалкогольные напитки" /><span>Безалкогольные напитки</span></label>
             </div>
           </fieldset>
 
           <div id="commentField" class="field full conditional-block">
-            <label for="comment">Комментарий</label>
+            <div class="field-label">Комментарий</div>
             <textarea id="comment" name="comment" placeholder="Можно написать пожелание, вопрос или комментарий"></textarea>
           </div>
 
@@ -218,6 +292,10 @@
       <p class="names">Рамис<br>и Асема</p>
     </section>
   </div>
+
+  <audio id="pageAudio" preload="metadata" loop playsinline>
+    <source src="Iron_Wine_-_Flightless_Bird_American_Mouth_48271367.mp3" type="audio/mpeg">
+  </audio>
 
   <script src="app.js"></script>
 </body>

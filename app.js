@@ -10,6 +10,9 @@ const countdownItems = countdown ? {
   seconds: countdown.querySelector('[data-unit="seconds"] strong'),
   secondsLabel: countdown.querySelector('[data-unit="seconds"] span')
 } : null;
+const audio = document.getElementById('pageAudio');
+const audioControl = document.getElementById('audioControl');
+const audioToggle = document.getElementById('audioToggle');
 
 function plural(value, one, few, many) {
   const mod10 = value % 10;
@@ -40,6 +43,48 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
+function syncAudioButtonState(isPlaying) {
+  if (!audioToggle) return;
+  audioToggle.classList.toggle('is-playing', isPlaying);
+  audioToggle.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+  audioToggle.setAttribute('aria-label', isPlaying ? 'Выключить музыку' : 'Включить музыку');
+}
+
+function syncAudioHintVisibility() {
+  if (!audioControl) return;
+  const shouldCollapse = window.scrollY > 48;
+  if (audioControl.classList.contains('is-collapsed') === shouldCollapse) return;
+  audioControl.classList.toggle('is-collapsed', shouldCollapse);
+}
+
+if (audio && audioToggle) {
+  audio.volume = 0.45;
+
+  audioToggle.addEventListener('click', async () => {
+    if (audio.paused) {
+      try {
+        await audio.play();
+        syncAudioButtonState(true);
+      } catch (error) {
+        console.error(error);
+        syncAudioButtonState(false);
+      }
+    } else {
+      audio.pause();
+      syncAudioButtonState(false);
+    }
+  });
+
+  audio.addEventListener('pause', () => syncAudioButtonState(false));
+  audio.addEventListener('play', () => syncAudioButtonState(true));
+  audio.addEventListener('ended', () => syncAudioButtonState(false));
+
+  syncAudioButtonState(false);
+}
+
+syncAudioHintVisibility();
+window.addEventListener('scroll', syncAudioHintVisibility, { passive: true });
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) entry.target.classList.add('visible');
@@ -59,6 +104,7 @@ const conditionalBlocks = Array.from(form.querySelectorAll('.conditional-block')
 const storageKey = 'ramis-asem-rsvp';
 const submittedStorageKey = 'ramis-asem-rsvp-last-submitted';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2P2nob1WMom0d5gWFex3n_e4aHrFuLBC5IMana0d8KSF82X6R06e4Y_MRQ2K4ZEI0RA/exec';
+const textEntrySelector = 'input[type="text"], input[type="tel"], textarea';
 
 function setNotice(message) {
   notice.style.display = 'block';
@@ -71,6 +117,31 @@ function createHiddenField(name, value) {
   input.name = name;
   input.value = value;
   return input;
+}
+
+function isTouchLikeDevice() {
+  return window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+}
+
+function isTextEntryElement(element) {
+  return !!element && typeof element.matches === 'function' && element.matches(textEntrySelector);
+}
+
+function blurActiveTextEntryOnOutsideTap(event) {
+  if (!isTouchLikeDevice()) return;
+
+  const activeElement = document.activeElement;
+  if (!isTextEntryElement(activeElement)) return;
+
+  const target = event.target;
+  if (!(target instanceof Element)) return;
+  if (target === activeElement || target.closest(textEntrySelector)) return;
+
+  window.requestAnimationFrame(() => {
+    if (document.activeElement === activeElement) {
+      activeElement.blur();
+    }
+  });
 }
 
 function hasSelectedDrink() {
@@ -256,6 +327,8 @@ childrenInputs.forEach((input) => {
 syncAttendanceDependentState();
 syncChildrenNoteState();
 syncDrinksValidity();
+
+document.addEventListener(window.PointerEvent ? 'pointerdown' : 'touchstart', blurActiveTextEntryOnOutsideTap, true);
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
