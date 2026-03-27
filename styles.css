@@ -19,6 +19,7 @@ body {
   margin: 0;
   font-family: "Cormorant Garamond", Georgia, serif;
   color: var(--text);
+  overflow-x: hidden;
   background:
     radial-gradient(circle at top left, rgba(255,255,255,0.45), transparent 30%),
     linear-gradient(180deg, #d9d7d2 0%, #cdc7bd 100%);
@@ -339,6 +340,8 @@ form {
   display: grid;
   gap: 20px;
   margin-top: 14px;
+  width: 100%;
+  align-items: start;
 }
 
 .field {
@@ -346,11 +349,23 @@ form {
   gap: 8px;
 }
 
+form > *,
+.field,
+fieldset,
+.options,
+.option,
+.form-actions,
+.notice {
+  width: 100%;
+  min-width: 0;
+}
+
 label,
 legend {
   font-size: clamp(31px, 5vw, 40px);
   font-weight: 600;
   line-height: 1.08;
+  overflow-wrap: anywhere;
 }
 
 .hint {
@@ -358,6 +373,7 @@ legend {
   color: var(--muted);
   font-size: clamp(20px, 3.9vw, 28px);
   line-height: 1.18;
+  overflow-wrap: anywhere;
 }
 
 input[type="text"],
@@ -419,6 +435,8 @@ fieldset {
 .option span {
   font-size: clamp(26px, 4.6vw, 34px);
   line-height: 1.08;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .form-actions {
@@ -473,6 +491,180 @@ fieldset {
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (max-width: 430px) {
+  .page {
+    width: min(calc(100% - 20px), var(--max));
+    padding: 14px 0 44px;
+  }
+
+  .hero-card {
+    padding: 18px 14px 28px;
+  }
+
+  .hero-frame {
+    padding: 14px;
+  }
+
+  .section {
+    padding: 24px 14px;
+  }
+
+  .venue-card,
+  .map-card,
+  .detail-card,
+  .program-card,
+  .contact-card,
+  .form-card {
+    padding: 20px 16px;
+  }
+
+  form,
+  .field,
+  fieldset,
+  .options {
+    justify-items: stretch;
+  }
+
+  .field > label,
+  .field > .hint,
+  fieldset > legend,
+  fieldset > .hint {
+    width: 100%;
+  }
+
+  .hero-names {
+    font-size: clamp(44px, 15vw, 72px);
+  }
+
+  .hero-date {
+    font-size: clamp(18px, 5.5vw, 28px);
+    letter-spacing: 0.14em;
+  }
+
+  .countdown-label {
+    font-size: 15px;
+  }
+
+  .countdown {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .count-item {
+    padding: 10px 6px;
+  }
+
+  .count-item strong {
+    font-size: 22px;
+  }
+
+  .count-item span {
+    font-size: 13px;
+  }
+
+  .section-title {
+    font-size: clamp(34px, 12vw, 56px);
+    margin-bottom: 10px;
+  }
+
+  .intro-text,
+  .detail-card p,
+  .contact-card p,
+  .venue-copy,
+  .rsvp-text {
+    font-size: clamp(20px, 6vw, 28px);
+    line-height: 1.18;
+  }
+
+  .venue-name {
+    font-size: clamp(34px, 10vw, 48px);
+  }
+
+  .detail-card h3,
+  .contact-card h3,
+  .form-title {
+    font-size: clamp(30px, 8vw, 40px);
+  }
+
+  label,
+  legend {
+    font-size: clamp(24px, 6.5vw, 32px);
+  }
+
+  .hint {
+    font-size: clamp(17px, 4.4vw, 22px);
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  textarea,
+  select {
+    max-width: 100%;
+    font-size: 22px;
+    padding: 12px 14px;
+  }
+
+  .option {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .option span {
+    font-size: clamp(21px, 5.5vw, 28px);
+  }
+
+  .button {
+    min-height: 48px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.12;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .chip {
+    min-height: 42px;
+    padding: 8px 14px;
+    font-size: 18px;
+  }
+
+  .notice {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-names {
+    font-size: clamp(40px, 14vw, 60px);
+  }
+
+  .hero-date {
+    font-size: 16px;
+    letter-spacing: 0.12em;
+  }
+
+  .section-title {
+    font-size: clamp(30px, 11vw, 46px);
+  }
+
+  .intro-text,
+  .detail-card p,
+  .contact-card p,
+  .venue-copy,
+  .rsvp-text {
+    font-size: clamp(18px, 5.8vw, 24px);
+  }
+
+  .venue-name {
+    font-size: clamp(30px, 9.5vw, 42px);
+  }
+
+  .button,
+  .chip {
+    font-size: 17px;
+  }
 }
 
 @media (min-width: 760px) {
