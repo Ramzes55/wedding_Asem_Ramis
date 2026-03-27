@@ -322,6 +322,10 @@ a { color: inherit; }
   opacity: 0.62;
 }
 
+.intro .leaf {
+  margin: 8px auto 6px;
+}
+
 .venue-grid {
   display: grid;
   gap: 20px;
