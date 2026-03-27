@@ -1,11 +1,29 @@
 param(
-  [int]$Port = 5500
+  [int]$Port = 5500,
+  [switch]$Lan
 )
 
 $ErrorActionPreference = 'Stop'
 
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, $Port)
+$bindAddress = if ($Lan) { [System.Net.IPAddress]::Any } else { [System.Net.IPAddress]::Loopback }
+$listener = [System.Net.Sockets.TcpListener]::new($bindAddress, $Port)
+
+function Get-LocalIPv4Address {
+  $ipconfigOutput = ipconfig
+  $ipv4Line = $ipconfigOutput | Where-Object { $_ -match 'IPv4' } | Select-Object -First 1
+
+  if (-not $ipv4Line) {
+    return $null
+  }
+
+  $match = [regex]::Match($ipv4Line, '(\d{1,3}\.){3}\d{1,3}')
+  if ($match.Success) {
+    return $match.Value
+  }
+
+  return $null
+}
 
 function Get-ContentType {
   param(
@@ -98,6 +116,14 @@ function Read-RequestLine {
 try {
   $listener.Start()
   Write-Host "Local server started: http://localhost:$Port"
+  if ($Lan) {
+    $localIp = Get-LocalIPv4Address
+    if ($localIp) {
+      Write-Host "LAN access: http://${localIp}:$Port"
+    } else {
+      Write-Host 'LAN access enabled, but local IPv4 address was not detected automatically.'
+    }
+  }
   Write-Host "Project root: $projectRoot"
   Write-Host 'Press Ctrl+C to stop the server.'
 
@@ -105,7 +131,11 @@ try {
     $client = $listener.AcceptTcpClient()
 
     try {
+      $client.ReceiveTimeout = 5000
+      $client.SendTimeout = 5000
       $stream = $client.GetStream()
+      $stream.ReadTimeout = 5000
+      $stream.WriteTimeout = 5000
       $reader = [System.IO.StreamReader]::new($stream, [System.Text.Encoding]::ASCII, $false, 1024, $true)
       $requestLine = Read-RequestLine -Reader $reader
 
@@ -140,6 +170,8 @@ try {
       $fileBytes = if ($method -eq 'HEAD') { [byte[]]::new(0) } else { [System.IO.File]::ReadAllBytes($filePath) }
       $contentType = Get-ContentType -Path $filePath
       Write-HttpResponse -Stream $stream -StatusCode 200 -StatusText 'OK' -Body $fileBytes -ContentType $contentType
+    } catch [System.IO.IOException] {
+      Write-Host "Request timeout or connection error: $($_.Exception.Message)"
     } catch {
       Write-Host "Request error: $($_.Exception.Message)"
     } finally {
