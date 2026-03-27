@@ -142,7 +142,7 @@
           <div class="field full">
             <label for="guestName">Ваше имя и фамилия</label>
             <div class="hint">Напишите ваше имя и имена гостей, которые будут присутствовать вместе с вами</div>
-            <input id="guestName" name="guestName" type="text" placeholder="Например: Айгерим и Марат" required />
+            <input id="guestName" name="guestName" type="text" placeholder="Например: Алексей Ихсанов" required />
           </div>
 
           <fieldset class="full">
@@ -154,7 +154,7 @@
             </div>
           </fieldset>
 
-          <fieldset>
+          <fieldset id="childrenFieldset" class="conditional-block">
             <legend>Будут ли с вами дети?</legend>
             <div class="hint">Если да, укажите количество и возраст</div>
             <div class="options">
@@ -163,12 +163,12 @@
             </div>
           </fieldset>
 
-          <div class="field">
+          <div id="childrenNoteField" class="field conditional-block">
             <label for="childrenNote">Если да — уточнение</label>
             <input id="childrenNote" name="childrenNote" type="text" placeholder="Например: 1 ребёнок, 6 лет" />
           </div>
 
-          <fieldset class="full">
+          <fieldset id="drinksFieldset" class="full conditional-block">
             <legend>Что предпочитаете из напитков?</legend>
             <div class="hint">Можно выбрать несколько вариантов</div>
             <div class="options">
@@ -181,7 +181,7 @@
             </div>
           </fieldset>
 
-          <div class="field full">
+          <div id="commentField" class="field full conditional-block">
             <label for="comment">Комментарий</label>
             <textarea id="comment" name="comment" placeholder="Можно написать пожелание, вопрос или комментарий"></textarea>
           </div>
@@ -261,6 +261,12 @@
 
     const form = document.getElementById('rsvp-form');
     const notice = document.getElementById('notice');
+    const attendanceInputs = Array.from(form.querySelectorAll('[name="attendance"]'));
+    const childrenInputs = Array.from(form.querySelectorAll('[name="children"]'));
+    const childrenNoteInput = document.getElementById('childrenNote');
+    const commentInput = document.getElementById('comment');
+    const drinkInputs = Array.from(form.querySelectorAll('[name="drinks"]'));
+    const conditionalBlocks = Array.from(form.querySelectorAll('.conditional-block'));
     const storageKey = 'ramis-asem-rsvp';
     const submittedStorageKey = 'ramis-asem-rsvp-last-submitted';
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2P2nob1WMom0d5gWFex3n_e4aHrFuLBC5IMana0d8KSF82X6R06e4Y_MRQ2K4ZEI0RA/exec';
@@ -276,6 +282,76 @@
       input.name = name;
       input.value = value;
       return input;
+    }
+
+    function hasSelectedDrink() {
+      return drinkInputs.some((input) => input.checked);
+    }
+
+    function syncDrinksValidity() {
+      if (isAttendanceDeclined()) {
+        drinkInputs.forEach((input) => input.setCustomValidity(''));
+        return;
+      }
+      const message = hasSelectedDrink() ? '' : 'Выберите хотя бы один вариант напитка.';
+      drinkInputs.forEach((input) => input.setCustomValidity(''));
+      if (drinkInputs[0]) {
+        drinkInputs[0].setCustomValidity(message);
+      }
+    }
+
+    function isAttendanceDeclined() {
+      const selected = form.querySelector('[name="attendance"]:checked');
+      return !!selected && selected.value === 'К сожалению, не смогу присутствовать';
+    }
+
+    function syncAttendanceDependentState() {
+      const declined = isAttendanceDeclined();
+
+      conditionalBlocks.forEach((block) => {
+        block.classList.toggle('is-disabled', declined);
+      });
+
+      childrenInputs.forEach((input) => {
+        input.disabled = declined;
+      });
+
+      drinkInputs.forEach((input) => {
+        input.disabled = declined;
+      });
+
+      commentInput.disabled = declined;
+
+      if (declined) {
+        childrenNoteInput.disabled = true;
+        childrenNoteInput.required = false;
+        if (conditionalBlocks.some((block) => block.contains(document.activeElement))) {
+          document.activeElement.blur();
+        }
+        return;
+      }
+
+      syncChildrenNoteState();
+    }
+
+    function syncChildrenNoteState() {
+      if (isAttendanceDeclined()) {
+        childrenNoteInput.disabled = true;
+        childrenNoteInput.required = false;
+        return;
+      }
+
+      const selected = form.querySelector('[name="children"]:checked');
+      const value = selected ? selected.value : '';
+      const isYes = value === 'Да';
+      const isNo = value === 'Нет';
+
+      childrenNoteInput.disabled = isNo;
+      childrenNoteInput.required = isYes;
+
+      if (isNo && document.activeElement === childrenNoteInput) {
+        childrenNoteInput.blur();
+      }
     }
 
     function collectFormData() {
@@ -373,8 +449,39 @@
       console.error(error);
     }
 
+    drinkInputs.forEach((input) => {
+      input.addEventListener('change', syncDrinksValidity);
+    });
+
+    attendanceInputs.forEach((input) => {
+      input.addEventListener('change', () => {
+        syncAttendanceDependentState();
+        syncDrinksValidity();
+      });
+    });
+
+    childrenInputs.forEach((input) => {
+      input.addEventListener('change', syncChildrenNoteState);
+    });
+
+    syncAttendanceDependentState();
+    syncChildrenNoteState();
+    syncDrinksValidity();
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
+
+      syncAttendanceDependentState();
+      syncChildrenNoteState();
+      syncDrinksValidity();
+      if (!isAttendanceDeclined() && !hasSelectedDrink()) {
+        if (drinkInputs[0]) {
+          drinkInputs[0].reportValidity();
+          drinkInputs[0].focus();
+        }
+        return;
+      }
+
       const data = collectFormData();
       localStorage.setItem(storageKey, JSON.stringify(data));
 
@@ -392,6 +499,9 @@
         notice.style.display = 'block';
         notice.textContent = 'Спасибо! Ваш ответ отправлен.';
         form.reset();
+        syncAttendanceDependentState();
+        syncChildrenNoteState();
+        syncDrinksValidity();
         localStorage.removeItem(storageKey);
       } catch (error) {
         notice.style.display = 'block';
