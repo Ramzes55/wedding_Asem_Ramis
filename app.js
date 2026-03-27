@@ -13,6 +13,65 @@ const countdownItems = countdown ? {
 const audio = document.getElementById('pageAudio');
 const audioControl = document.getElementById('audioControl');
 const audioToggle = document.getElementById('audioToggle');
+const letterIntro = document.getElementById('letterIntro');
+const letterIntroSeal = document.getElementById('letterIntroSeal');
+const heroImage = document.querySelector('.hero-image');
+const letterIntroDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 220 : 2000;
+let letterIntroEndTimer = 0;
+let letterIntroCleanupTimer = 0;
+const introPreloadedImages = [];
+
+function warmImage(src, isHighPriority) {
+  if (!src) return;
+  const image = new Image();
+  if (isHighPriority) {
+    image.fetchPriority = 'high';
+  }
+  image.decoding = 'sync';
+  image.src = src;
+  if (typeof image.decode === 'function') {
+    image.decode().catch(() => {});
+  }
+  introPreloadedImages.push(image);
+}
+
+function clearLetterIntroTimers() {
+  window.clearTimeout(letterIntroEndTimer);
+  window.clearTimeout(letterIntroCleanupTimer);
+}
+
+function finishLetterIntro() {
+  if (!letterIntro) return;
+  clearLetterIntroTimers();
+  document.body.classList.remove('intro-active');
+  letterIntro.classList.remove('is-active', 'is-opening');
+  letterIntro.setAttribute('aria-hidden', 'true');
+  if (letterIntroSeal) {
+    letterIntroSeal.disabled = false;
+  }
+}
+
+function playLetterIntro() {
+  if (!letterIntro || letterIntro.classList.contains('is-opening')) return;
+
+  clearLetterIntroTimers();
+  document.body.classList.add('intro-active');
+  letterIntro.setAttribute('aria-hidden', 'false');
+  letterIntro.classList.add('is-active');
+  letterIntro.classList.remove('is-opening');
+  if (letterIntroSeal) {
+    letterIntroSeal.disabled = true;
+  }
+  letterIntro.classList.add('is-opening');
+
+  letterIntroEndTimer = window.setTimeout(() => {
+    document.body.classList.remove('intro-active');
+  }, letterIntroDuration);
+
+  letterIntroCleanupTimer = window.setTimeout(() => {
+    finishLetterIntro();
+  }, letterIntroDuration + 40);
+}
 
 function plural(value, one, few, many) {
   const mod10 = value % 10;
@@ -55,6 +114,22 @@ function syncAudioHintVisibility() {
   const shouldCollapse = window.scrollY > 48;
   if (audioControl.classList.contains('is-collapsed') === shouldCollapse) return;
   audioControl.classList.toggle('is-collapsed', shouldCollapse);
+}
+
+if (letterIntro) {
+  document.body.classList.add('intro-active');
+  letterIntro.setAttribute('aria-hidden', 'false');
+}
+
+warmImage(heroImage ? (heroImage.currentSrc || heroImage.getAttribute('src')) : 'IMG_3563_web.jpg', true);
+warmImage('img_3.png', false);
+warmImage('img_2.png', false);
+
+if (letterIntroSeal) {
+  letterIntroSeal.addEventListener('click', (event) => {
+    event.preventDefault();
+    playLetterIntro();
+  });
 }
 
 if (audio && audioToggle) {

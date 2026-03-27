@@ -10,9 +10,23 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=EB+Garamond:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="IMG_3563_web.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="img_3.png">
+  <link rel="preload" as="image" href="img_2.png">
   <link rel="stylesheet" href="styles.css">
+  <noscript><style>.letter-intro{display:none!important;}</style></noscript>
 </head>
 <body>
+  <div class="letter-intro is-active" id="letterIntro" aria-hidden="true">
+    <div class="letter-intro__canvas" aria-hidden="true">
+      <div class="letter-intro__door letter-intro__door--left"></div>
+      <div class="letter-intro__door letter-intro__door--right"></div>
+      <button class="letter-intro__seal" id="letterIntroSeal" type="button" aria-label="Открыть приглашение">
+        <img class="letter-intro__seal-image" src="img_2.png" alt="" />
+      </button>
+    </div>
+  </div>
+
   <div class="page">
     <div class="audio-control" id="audioControl">
       <button
@@ -33,7 +47,9 @@
 
     <section class="hero-card reveal visible">
       <div class="hero-frame">
-        <img class="hero-image" src="IMG_3563.JPG" alt="Рамис и Асема" />
+        <div class="hero-media">
+          <img class="hero-image" src="IMG_3563_web.jpg" alt="Рамис и Асема" width="1280" height="1921" fetchpriority="high" loading="eager" decoding="sync" />
+        </div>
       </div>
       <h1 class="hero-names">Рамис и Асема</h1>
       <div class="hero-calendar" aria-label="Календарь свадьбы — 7 августа 2026">
