@@ -194,19 +194,19 @@
         <h2 class="section-title" style="text-align:center; margin-bottom: 18px;">Программа<br>дня</h2>
         <div class="program-list">
           <div class="program-item">
-            <img class="program-icon" src="assets/icons/location-svgrepo-com.svg" alt="" aria-hidden="true" />
+            <span class="icon-mark program-icon" aria-hidden="true" style="--icon-url: url('assets/icons/wedding-location-svgrepo-com.svg');"></span>
             <div><strong>14:30</strong><span>Сбор гостей</span></div>
           </div>
           <div class="program-item">
-            <img class="program-icon" src="assets/icons/wedding-rings-wedding-svgrepo-com.svg" alt="" aria-hidden="true" />
+            <img class="program-icon program-icon--detailed" src="assets/icons/wedding-rings-wedding-svgrepo-com.svg" alt="" aria-hidden="true" />
             <div><strong>15:00</strong><span>Свадебная церемония</span></div>
           </div>
           <div class="program-item">
-            <img class="program-icon" src="assets/icons/Clinking%20Glasses%20SVG%20Icon.svg" alt="" aria-hidden="true" />
+            <img class="program-icon program-icon--detailed" src="assets/icons/Clinking%20Glasses%20SVG%20Icon.svg" alt="" aria-hidden="true" />
             <div><strong>16:00</strong><span>Начало банкета</span></div>
           </div>
           <div class="program-item">
-            <img class="program-icon" src="assets/icons/wedding-cake-cook-svgrepo-com.svg" alt="" aria-hidden="true" />
+            <img class="program-icon program-icon--detailed" src="assets/icons/wedding-cake-cook-svgrepo-com.svg" alt="" aria-hidden="true" />
             <div><strong>23:00</strong><span>Завершение вечера</span></div>
           </div>
         </div>
@@ -216,9 +216,31 @@
     <section class="section reveal">
       <h2 class="section-title" style="text-align:center;">Детали</h2>
       <div class="details-grid">
-        <article class="detail-card">
+        <article class="detail-card detail-card--dress-code">
           <h3>Дресс-код</h3>
           <p>Мы очень старались сделать праздник красивым и будем рады, если при выборе наряда вы отдадите предпочтение пастельным и спокойным оттенкам.</p>
+          <div class="dress-code-palette" aria-label="Рекомендуемая палитра дресс-кода">
+            <div class="dress-swatch">
+              <span class="dress-swatch__dot is-milk"></span>
+              <span class="dress-swatch__label">Молочный</span>
+            </div>
+            <div class="dress-swatch">
+              <span class="dress-swatch__dot is-sand"></span>
+              <span class="dress-swatch__label">Песочный</span>
+            </div>
+            <div class="dress-swatch">
+              <span class="dress-swatch__dot is-beige"></span>
+              <span class="dress-swatch__label">Бежевый</span>
+            </div>
+            <div class="dress-swatch">
+              <span class="dress-swatch__dot is-sage"></span>
+              <span class="dress-swatch__label">Дымчато-зелёный</span>
+            </div>
+            <div class="dress-swatch">
+              <span class="dress-swatch__dot is-warm-gray"></span>
+              <span class="dress-swatch__label">Тёплый серый</span>
+            </div>
+          </div>
         </article>
         <article class="detail-card">
           <h3>Подарки</h3>
@@ -336,6 +358,7 @@
     <section class="section footer-sign reveal">
       <p class="with-love">С любовью,</p>
       <p class="names">Рамис<br>и Асема</p>
+      <p class="footer-sign__stamp">7 августа 2026 • Саратов</p>
       <img class="footer-sign__icon" src="assets/icons/wedding-couple-svgrepo-com.svg" alt="" aria-hidden="true" />
     </section>
   </div>
