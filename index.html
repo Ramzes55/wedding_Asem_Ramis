@@ -2,17 +2,51 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Рамис и Асема — свадебное приглашение</title>
   <meta name="description" content="Свадебное приглашение Рамиса и Асемы" />
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="shortcut icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=EB+Garamond:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="IMG_3563_web.jpg" fetchpriority="high">
-  <link rel="preload" as="image" href="img_3.png">
-  <link rel="preload" as="image" href="img_2.png">
+  <link rel="preload" as="image" href="assets/images/hero/hero-couple.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/images/intro/envelope-closed.png">
+  <link rel="preload" as="image" href="assets/images/intro/wax-seal.png">
+  <script>
+    (function () {
+      var syncTimer = 0;
+
+      function setAppHeight() {
+        var docEl = document.documentElement;
+        var viewport = window.visualViewport;
+        var viewportHeight = viewport && viewport.height ? viewport.height : 0;
+        var viewportTop = viewport && typeof viewport.offsetTop === 'number' ? viewport.offsetTop : 0;
+        var innerHeight = window.innerHeight || 0;
+        var clientHeight = docEl ? docEl.clientHeight : 0;
+        var appHeight = Math.max(innerHeight, clientHeight, viewportHeight + viewportTop);
+        if (!appHeight) return;
+        docEl.style.setProperty('--app-height', Math.ceil(appHeight) + 2 + 'px');
+      }
+
+      function syncAppHeight() {
+        window.clearTimeout(syncTimer);
+        setAppHeight();
+        window.requestAnimationFrame(setAppHeight);
+        syncTimer = window.setTimeout(setAppHeight, 240);
+      }
+
+      window.__syncAppHeight = syncAppHeight;
+      syncAppHeight();
+      window.addEventListener('resize', syncAppHeight, { passive: true });
+      window.addEventListener('orientationchange', syncAppHeight);
+      window.addEventListener('pageshow', syncAppHeight);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', syncAppHeight, { passive: true });
+        window.visualViewport.addEventListener('scroll', syncAppHeight, { passive: true });
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="styles.css">
   <noscript><style>.letter-intro{display:none!important;}</style></noscript>
 </head>
@@ -21,8 +55,9 @@
     <div class="letter-intro__canvas" aria-hidden="true">
       <div class="letter-intro__door letter-intro__door--left"></div>
       <div class="letter-intro__door letter-intro__door--right"></div>
-      <button class="letter-intro__seal" id="letterIntroSeal" type="button" aria-label="Открыть приглашение">
-        <img class="letter-intro__seal-image" src="img_2.png" alt="" />
+      <button class="letter-intro__seal" id="letterIntroSeal" type="button" aria-label="Открыть приглашение" style="background:transparent;border:0;padding:0;-webkit-appearance:none;appearance:none;">
+        <img class="letter-intro__seal-image" src="assets/images/intro/wax-seal.png" alt="" width="581" height="574" fetchpriority="high" decoding="sync" style="display:block;background:transparent;" />
+        <span class="letter-intro__seal-label" aria-hidden="true">Нажмите,<br>чтобы открыть</span>
       </button>
     </div>
   </div>
@@ -48,7 +83,7 @@
     <section class="hero-card reveal visible">
       <div class="hero-frame">
         <div class="hero-media">
-          <img class="hero-image" src="IMG_3563_web.jpg" alt="Рамис и Асема" width="1280" height="1921" fetchpriority="high" loading="eager" decoding="sync" />
+          <img class="hero-image" src="assets/images/hero/hero-couple.jpg" alt="Рамис и Асема" width="1280" height="1921" fetchpriority="high" loading="eager" decoding="sync" />
         </div>
       </div>
       <h1 class="hero-names">Рамис и Асема</h1>
@@ -310,7 +345,7 @@
   </div>
 
   <audio id="pageAudio" preload="metadata" loop playsinline>
-    <source src="Iron_Wine_-_Flightless_Bird_American_Mouth_48271367.mp3" type="audio/mpeg">
+    <source src="assets/audio/intro-song.mp3" type="audio/mpeg">
   </audio>
 
   <script src="app.js"></script>

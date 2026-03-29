@@ -17,9 +17,14 @@ const letterIntro = document.getElementById('letterIntro');
 const letterIntroSeal = document.getElementById('letterIntroSeal');
 const heroImage = document.querySelector('.hero-image');
 const letterIntroDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 220 : 2000;
-let letterIntroEndTimer = 0;
+const letterIntroUnlockDelay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 32;
 let letterIntroCleanupTimer = 0;
+let letterIntroUnlockTimer = 0;
 const introPreloadedImages = [];
+
+if (typeof window.__syncAppHeight === 'function') {
+  window.__syncAppHeight();
+}
 
 function warmImage(src, isHighPriority) {
   if (!src) return;
@@ -36,14 +41,18 @@ function warmImage(src, isHighPriority) {
 }
 
 function clearLetterIntroTimers() {
-  window.clearTimeout(letterIntroEndTimer);
   window.clearTimeout(letterIntroCleanupTimer);
+  window.clearTimeout(letterIntroUnlockTimer);
+}
+
+function unlockLetterIntroScroll() {
+  document.body.classList.remove('intro-active');
 }
 
 function finishLetterIntro() {
   if (!letterIntro) return;
   clearLetterIntroTimers();
-  document.body.classList.remove('intro-active');
+  unlockLetterIntroScroll();
   letterIntro.classList.remove('is-active', 'is-opening');
   letterIntro.setAttribute('aria-hidden', 'true');
   if (letterIntroSeal) {
@@ -64,9 +73,9 @@ function playLetterIntro() {
   }
   letterIntro.classList.add('is-opening');
 
-  letterIntroEndTimer = window.setTimeout(() => {
-    document.body.classList.remove('intro-active');
-  }, letterIntroDuration);
+  letterIntroUnlockTimer = window.setTimeout(() => {
+    unlockLetterIntroScroll();
+  }, letterIntroUnlockDelay);
 
   letterIntroCleanupTimer = window.setTimeout(() => {
     finishLetterIntro();
@@ -121,9 +130,9 @@ if (letterIntro) {
   letterIntro.setAttribute('aria-hidden', 'false');
 }
 
-warmImage(heroImage ? (heroImage.currentSrc || heroImage.getAttribute('src')) : 'IMG_3563_web.jpg', true);
-warmImage('img_3.png', false);
-warmImage('img_2.png', false);
+warmImage(heroImage ? (heroImage.currentSrc || heroImage.getAttribute('src')) : 'assets/images/hero/hero-couple.jpg', true);
+warmImage('assets/images/intro/envelope-closed.png', false);
+warmImage('assets/images/intro/wax-seal.png', false);
 
 if (letterIntroSeal) {
   letterIntroSeal.addEventListener('click', (event) => {
