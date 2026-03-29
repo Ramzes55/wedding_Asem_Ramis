@@ -182,6 +182,7 @@ const notice = document.getElementById('notice');
 const attendanceInputs = Array.from(form.querySelectorAll('[name="attendance"]'));
 const childrenInputs = Array.from(form.querySelectorAll('[name="children"]'));
 const childrenNoteInput = document.getElementById('childrenNote');
+const commentField = document.getElementById('commentField');
 const commentInput = document.getElementById('comment');
 const drinkInputs = Array.from(form.querySelectorAll('[name="drinks"]'));
 const conditionalBlocks = Array.from(form.querySelectorAll('.conditional-block'));
@@ -251,9 +252,11 @@ function isAttendanceDeclined() {
 
 function syncAttendanceDependentState() {
   const declined = isAttendanceDeclined();
+  const blocksDisabledWhenDeclined = conditionalBlocks.filter((block) => block !== commentField);
 
   conditionalBlocks.forEach((block) => {
-    block.classList.toggle('is-disabled', declined);
+    const shouldDisable = declined && block !== commentField;
+    block.classList.toggle('is-disabled', shouldDisable);
   });
 
   childrenInputs.forEach((input) => {
@@ -264,12 +267,12 @@ function syncAttendanceDependentState() {
     input.disabled = declined;
   });
 
-  commentInput.disabled = declined;
+  commentInput.disabled = false;
 
   if (declined) {
     childrenNoteInput.disabled = true;
     childrenNoteInput.required = false;
-    if (conditionalBlocks.some((block) => block.contains(document.activeElement))) {
+    if (blocksDisabledWhenDeclined.some((block) => block.contains(document.activeElement))) {
       document.activeElement.blur();
     }
     return;

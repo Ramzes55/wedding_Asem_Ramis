@@ -527,6 +527,39 @@ a { color: inherit; }
   padding: 30px 22px;
 }
 
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(100%, 280px);
+  margin: 10px auto 0;
+  color: rgba(128, 92, 58, 0.48);
+}
+
+.section-divider__line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(128, 92, 58, 0), rgba(128, 92, 58, 0.34), rgba(128, 92, 58, 0));
+}
+
+.section-divider__ornament {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(128, 92, 58, 0.2);
+  background: rgba(255,255,255,0.58);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.section-divider__ornament::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: rgba(128, 92, 58, 0.56);
+}
+
 .intro {
   text-align: center;
   padding-top: 42px;
@@ -637,8 +670,15 @@ a { color: inherit; }
   background: rgba(255,255,255,0.78);
   display: grid;
   place-items: center;
-  font-size: 36px;
+  border: 1px solid rgba(35, 33, 30, 0.08);
   box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+.map-badge__icon {
+  width: 30px;
+  height: 30px;
+  --icon-opacity: 0.82;
+  --icon-color: rgba(128, 92, 58, 0.84);
 }
 
 .button {
@@ -1067,17 +1107,18 @@ fieldset {
 }
 
 .footer-sign .with-love {
-  font-size: clamp(42px, 7vw, 64px);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin: 0 0 14px;
+  margin: 0 0 10px;
+  font-family: "Great Vibes", cursive;
+  font-size: clamp(48px, 8vw, 72px);
+  line-height: 0.92;
 }
 
 .footer-sign .names {
   margin: 0;
   font-family: "Great Vibes", cursive;
-  font-size: clamp(54px, 10vw, 104px);
+  font-size: clamp(40px, 8vw, 86px);
   line-height: 0.95;
+  white-space: nowrap;
 }
 
 .footer-sign__stamp {
