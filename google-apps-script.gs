@@ -1,5 +1,6 @@
 const SPREADSHEET_ID = '1HikIoSju0khMcfZxbsGyyYv9E603deh-HhJn-et_VVQ';
 const SHEET_NAME = 'RSVP';
+const OWNER_EMAIL = 'ramis.karagoyshiev.origami@gmail.com';
 
 function doGet(e) {
   return ContentService
@@ -60,6 +61,21 @@ function doPost(e) {
       data.comment,
       data.page
     ]);
+
+    MailApp.sendEmail({
+      to: OWNER_EMAIL,
+      subject: 'Новый RSVP — ' + (data.guestName || 'Без имени'),
+      body:
+        'Новый ответ с сайта\n\n' +
+        'Имя: ' + data.guestName + '\n' +
+        'Присутствие: ' + data.attendance + '\n' +
+        'Дети: ' + data.children + '\n' +
+        'Уточнение по детям: ' + data.childrenNote + '\n' +
+        'Напитки: ' + data.drinksText + '\n' +
+        'Комментарий: ' + data.comment + '\n' +
+        'Страница: ' + data.page + '\n' +
+        'Время на сайте: ' + data.savedAt
+    });
 
     return ContentService
       .createTextOutput('ok')
