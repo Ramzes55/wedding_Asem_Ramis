@@ -132,7 +132,7 @@ a { color: inherit; }
   left: 50%;
   top: 49.2%;
   z-index: 5;
-  width: clamp(106px, 19.5vw, 144px);
+  width: clamp(118px, 21.5vw, 160px);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   display: grid;
@@ -177,7 +177,7 @@ a { color: inherit; }
   transform: translate(-50%, -50%);
   color: rgba(84, 42, 27, 0.92);
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(12px, 2.1vw, 15px);
+  font-size: clamp(13px, 2.25vw, 16px);
   font-weight: 600;
   letter-spacing: 0.02em;
   line-height: 0.96;
@@ -415,8 +415,8 @@ a { color: inherit; }
   min-width: 1ch;
   line-height: 1;
   z-index: 1;
-  color: var(--heart-accent);
-  text-shadow: 0 1px 0 rgba(255,255,255,0.45);
+  color: rgba(255, 250, 245, 0.98);
+  text-shadow: 0 1px 0 rgba(77, 36, 47, 0.18);
 }
 
 .hero-calendar__cell.is-highlighted > span::before {
@@ -427,7 +427,7 @@ a { color: inherit; }
   position: absolute;
   left: 50%;
   top: 50%;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 58'%3E%3Cpath d='M32 54.5 27.7 50.6C12.2 36.6 2 27.4 2 16.1 2 7 9 0 18.1 0c5.3 0 10.4 2.5 13.9 6.5C35.5 2.5 40.6 0 45.9 0 55 0 62 7 62 16.1c0 11.3-10.2 20.5-25.7 34.5L32 54.5Z' fill='%23ffffff' fill-opacity='.86'/%3E%3Cpath d='M32 54.5 27.7 50.6C12.2 36.6 2 27.4 2 16.1 2 7 9 0 18.1 0c5.3 0 10.4 2.5 13.9 6.5C35.5 2.5 40.6 0 45.9 0 55 0 62 7 62 16.1c0 11.3-10.2 20.5-25.7 34.5L32 54.5Z' fill='none' stroke='%237b3d49' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 58'%3E%3Cpath d='M32 54.5 27.7 50.6C12.2 36.6 2 27.4 2 16.1 2 7 9 0 18.1 0c5.3 0 10.4 2.5 13.9 6.5C35.5 2.5 40.6 0 45.9 0 55 0 62 7 62 16.1c0 11.3-10.2 20.5-25.7 34.5L32 54.5Z' fill='%237b3d49' fill-opacity='.96'/%3E%3Cpath d='M32 54.5 27.7 50.6C12.2 36.6 2 27.4 2 16.1 2 7 9 0 18.1 0c5.3 0 10.4 2.5 13.9 6.5C35.5 2.5 40.6 0 45.9 0 55 0 62 7 62 16.1c0 11.3-10.2 20.5-25.7 34.5L32 54.5Z' fill='none' stroke='%237b3d49' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-size: 94% 94%;
   background-repeat: no-repeat;
   background-position: center;
@@ -570,15 +570,26 @@ a { color: inherit; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 280px;
+  padding: 14px 14px 24px;
 }
 
-.venue-card .leaf {
-  position: absolute;
-  top: 24px;
-  left: 20px;
-  margin: 0;
+.venue-photo-frame {
+  width: 100%;
+  margin-top: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(35, 33, 30, 0.08);
+  background: rgba(255,255,255,0.48);
+  box-shadow: 0 14px 30px rgba(52, 42, 32, 0.08);
+}
+
+.venue-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }
 
 .map-card {
@@ -637,7 +648,7 @@ a { color: inherit; }
   display: grid;
   grid-template-columns: 34px 1fr;
   gap: 16px;
-  align-items: start;
+  align-items: center;
 }
 
 .program-item strong {
@@ -652,16 +663,16 @@ a { color: inherit; }
 
 .program-item span {
   display: block;
-  font-size: clamp(28px, 5vw, 40px);
-  line-height: 1.08;
+  font-size: clamp(22px, 4.2vw, 32px);
+  line-height: 1.04;
 }
 
-.leaf-line {
+.program-icon {
   width: 24px;
-  height: 74px;
-  opacity: 0.65;
-  margin-top: 0;
-  transform: translateY(2px);
+  height: 24px;
+  opacity: 0.72;
+  object-fit: contain;
+  align-self: center;
 }
 
 .details-grid,
@@ -695,6 +706,26 @@ a { color: inherit; }
   font-family: var(--numeric-font);
   font-variant-numeric: oldstyle-nums proportional-nums;
   font-feature-settings: "onum" 1, "pnum" 1;
+  text-align: center;
+}
+
+.contact-line__inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.contact-line__icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  opacity: 0.82;
+}
+
+.contact-line a {
+  font-size: 0.92em;
 }
 
 .contact-actions {
@@ -891,6 +922,14 @@ fieldset {
   line-height: 0.95;
 }
 
+.footer-sign__icon {
+  display: block;
+  width: clamp(68px, 14vw, 96px);
+  height: auto;
+  margin: 18px auto 0;
+  opacity: 0.72;
+}
+
 .audio-control {
   position: sticky;
   top: max(10px, env(safe-area-inset-top));
@@ -941,6 +980,12 @@ fieldset {
   place-items: center;
   cursor: pointer;
   transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, color .18s ease;
+}
+
+.chip__icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
 }
 
 .audio-toggle:hover {
@@ -995,11 +1040,11 @@ fieldset {
   }
 
   .letter-intro__seal {
-    width: 100px;
+    width: 112px;
   }
 
   .letter-intro__seal-label {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .hero-card {
@@ -1208,11 +1253,11 @@ fieldset {
 
 @media (max-width: 360px) {
   .letter-intro__seal {
-    width: 92px;
+    width: 104px;
   }
 
   .letter-intro__seal-label {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .audio-control__hint {
@@ -1286,7 +1331,7 @@ fieldset {
 
 @media (min-width: 760px) {
   .page { padding-top: 30px; padding-bottom: 70px; }
-  .letter-intro__seal { width: 132px; }
+  .letter-intro__seal { width: 144px; }
   .hero-card { padding: 28px 26px 38px; }
   .hero-calendar { width: 336px; }
   .hero-calendar__cell { font-size: 22px; }
