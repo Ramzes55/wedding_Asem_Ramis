@@ -927,6 +927,10 @@ form {
   gap: 2px;
 }
 
+.field--copy {
+  gap: 2px;
+}
+
 .field-copy {
   display: grid;
   gap: 0;
@@ -1075,6 +1079,10 @@ fieldset {
   border: 0;
   display: grid;
   gap: 14px;
+}
+
+.fieldset-copy {
+  gap: 2px;
 }
 
 .options {
