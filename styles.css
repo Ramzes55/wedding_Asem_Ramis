@@ -924,7 +924,12 @@ form {
 
 .field {
   display: grid;
-  gap: 10px;
+  gap: 2px;
+}
+
+.field-copy {
+  display: grid;
+  gap: 0;
 }
 
 form > *,
@@ -945,6 +950,35 @@ legend {
   font-weight: 600;
   line-height: 1.08;
   overflow-wrap: anywhere;
+}
+
+legend {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.field-label,
+legend,
+.hint,
+.field-copy,
+.field > label,
+fieldset > .hint {
+  text-align: left;
+}
+
+.field > .field-copy,
+.field > .field-label,
+.field > .hint,
+fieldset > legend,
+fieldset > .hint {
+  width: 100%;
+  margin-left: 0;
+  padding-left: 0;
+  max-width: none;
+  transform: none;
+  text-indent: 0;
 }
 
 .hint {
@@ -1128,15 +1162,16 @@ fieldset {
 }
 
 .footer-sign .names {
-  margin: 0;
+  display: inline-block;
+  margin: 0 0 -6px;
   font-family: "Great Vibes", cursive;
   font-size: clamp(40px, 8vw, 86px);
-  line-height: 0.95;
+  line-height: 0.9;
   white-space: nowrap;
 }
 
 .footer-sign__stamp {
-  margin: 14px auto 0;
+  margin: 6px auto 0;
   max-width: max-content;
   padding-top: 14px;
   font-family: var(--numeric-font);
