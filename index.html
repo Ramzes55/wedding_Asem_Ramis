@@ -203,15 +203,15 @@
         <div class="program-list">
           <div class="program-item">
             <span class="icon-mark program-icon" aria-hidden="true" style="--icon-url: url('assets/icons/program/location-venue.svg');"></span>
-            <div><strong>14:30</strong><span>Сбор гостей</span></div>
+            <div><strong>15:00</strong><span>Сбор гостей</span></div>
           </div>
           <div class="program-item">
             <img class="program-icon program-icon--detailed" src="assets/icons/program/wedding-rings.svg" alt="" aria-hidden="true" />
-            <div><strong>15:00</strong><span>Свадебная церемония</span></div>
+            <div><strong>16:00</strong><span>Свадебная церемония</span></div>
           </div>
           <div class="program-item">
             <img class="program-icon program-icon--detailed" src="assets/icons/program/banquet-glasses.svg" alt="" aria-hidden="true" />
-            <div><strong>16:00</strong><span>Начало банкета</span></div>
+            <div><strong>17:00</strong><span>Начало банкета</span></div>
           </div>
           <div class="program-item">
             <img class="program-icon program-icon--detailed" src="assets/icons/program/evening-cake.svg" alt="" aria-hidden="true" />
@@ -232,11 +232,15 @@
       <div class="details-grid">
         <article class="detail-card detail-card--dress-code">
           <h3>Дресс-код</h3>
-          <p>Мы очень старались сделать праздник красивым и будем рады, если при выборе наряда вы отдадите предпочтение пастельным и спокойным оттенкам.</p>
+          <p>Нам очень хочется, чтобы в день свадьбы всё выглядело красиво и гармонично, поэтому мы придумали небольшой дресс-код.<br><br>Будем рады, если вы поддержите стиль дня и выберете наряд в пастельных оттенках / коктейльном стиле / светлой гамме.<br><br>Это не строго, а по любви - чтобы все чувствовали себя уютно и красиво, а фото потом радовали всех!</p>
           <div class="dress-code-palette" aria-label="Рекомендуемая палитра дресс-кода">
             <div class="dress-swatch">
               <span class="dress-swatch__dot is-milk"></span>
               <span class="dress-swatch__label">Молочный</span>
+            </div>
+            <div class="dress-swatch">
+              <span class="dress-swatch__dot is-champagne"></span>
+              <span class="dress-swatch__label">Шампань</span>
             </div>
             <div class="dress-swatch">
               <span class="dress-swatch__dot is-sand"></span>
@@ -247,8 +251,8 @@
               <span class="dress-swatch__label">Бежевый</span>
             </div>
             <div class="dress-swatch">
-              <span class="dress-swatch__dot is-sage"></span>
-              <span class="dress-swatch__label">Дымчато-зелёный</span>
+              <span class="dress-swatch__dot is-blush"></span>
+              <span class="dress-swatch__label">Пудровый</span>
             </div>
             <div class="dress-swatch">
               <span class="dress-swatch__dot is-warm-gray"></span>
@@ -259,10 +263,6 @@
         <article class="detail-card">
           <h3>Подарки</h3>
           <p>Если вы захотите порадовать нас подарком, мы будем благодарны за вклад в бюджет нашей молодой семьи.</p>
-        </article>
-        <article class="detail-card">
-          <h3>Пожелание</h3>
-          <p>Будем благодарны, если вы воздержитесь от криков «Горько». Пусть в этот день чувства говорят сами за себя.</p>
         </article>
         <article class="detail-card">
           <h3>Атмосфера дня</h3>
@@ -290,6 +290,7 @@
               <label class="option"><input type="radio" name="attendance" value="К сожалению, не смогу присутствовать" /><span>К сожалению, не смогу присутствовать</span></label>
               <label class="option"><input type="radio" name="attendance" value="Сообщу позже" /><span>Сообщу позже</span></label>
             </div>
+            <div id="attendanceLaterHint" class="hint attendance-later-hint" hidden>Дайте, пожалуйста, свой ответ до 01.07.2026</div>
           </fieldset>
 
           <fieldset id="childrenFieldset" class="conditional-block fieldset-copy">

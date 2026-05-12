@@ -180,6 +180,7 @@ document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 const form = document.getElementById('rsvp-form');
 const notice = document.getElementById('notice');
 const attendanceInputs = Array.from(form.querySelectorAll('[name="attendance"]'));
+const attendanceLaterHint = document.getElementById('attendanceLaterHint');
 const childrenInputs = Array.from(form.querySelectorAll('[name="children"]'));
 const childrenNoteInput = document.getElementById('childrenNote');
 const commentField = document.getElementById('commentField');
@@ -248,6 +249,16 @@ function syncDrinksValidity() {
 function isAttendanceDeclined() {
   const selected = form.querySelector('[name="attendance"]:checked');
   return !!selected && selected.value === 'К сожалению, не смогу присутствовать';
+}
+
+function isAttendancePending() {
+  const selected = form.querySelector('[name="attendance"]:checked');
+  return !!selected && selected.value === 'Сообщу позже';
+}
+
+function syncAttendanceLaterHint() {
+  if (!attendanceLaterHint) return;
+  attendanceLaterHint.hidden = !isAttendancePending();
 }
 
 function syncAttendanceDependentState() {
@@ -402,6 +413,7 @@ drinkInputs.forEach((input) => {
 
 attendanceInputs.forEach((input) => {
   input.addEventListener('change', () => {
+    syncAttendanceLaterHint();
     syncAttendanceDependentState();
     syncDrinksValidity();
   });
@@ -411,6 +423,7 @@ childrenInputs.forEach((input) => {
   input.addEventListener('change', syncChildrenNoteState);
 });
 
+syncAttendanceLaterHint();
 syncAttendanceDependentState();
 syncChildrenNoteState();
 syncDrinksValidity();
@@ -420,6 +433,7 @@ document.addEventListener(window.PointerEvent ? 'pointerdown' : 'touchstart', bl
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
+  syncAttendanceLaterHint();
   syncAttendanceDependentState();
   syncChildrenNoteState();
   syncDrinksValidity();
@@ -448,6 +462,7 @@ form.addEventListener('submit', async (event) => {
     notice.style.display = 'block';
     notice.textContent = 'Спасибо! Ваш ответ отправлен.';
     form.reset();
+    syncAttendanceLaterHint();
     syncAttendanceDependentState();
     syncChildrenNoteState();
     syncDrinksValidity();
