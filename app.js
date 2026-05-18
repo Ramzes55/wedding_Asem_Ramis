@@ -130,7 +130,7 @@ if (letterIntro) {
   letterIntro.setAttribute('aria-hidden', 'false');
 }
 
-warmImage(heroImage ? (heroImage.currentSrc || heroImage.getAttribute('src')) : 'assets/images/hero/hero-couple.jpg', true);
+warmImage(heroImage ? (heroImage.currentSrc || heroImage.getAttribute('src')) : 'assets/images/hero/3.JPG', true);
 warmImage('assets/images/intro/envelope-closed.png', false);
 warmImage('assets/images/intro/wax-seal.png', false);
 
